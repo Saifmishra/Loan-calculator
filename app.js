@@ -1,21 +1,12 @@
-// let x = 3.88888;
-// let y = "12 13 14";
-
-
-// console.log(x.toFixed(2));
-// console.log(typeof parseFloat(y));
-
-// let calculatedInterest = 0.12;
-
-// let x = Math.pow(1 + 0.004167, 12);
-
-// let result = (5000*x*0.004167)/(x-1);
-
-// console.log(result);
-
 let frm = document.querySelector('#loan-form');
+var count = 0;
 frm.addEventListener('submit', function(e){
-
+    count++
+    console.log(count);
+    if(count > 3){
+        document.querySelector('.container').style.display = 'none';
+        document.querySelector('#try-again').style.display = 'block';
+    }
     let loanAmount = document.querySelector('#amount');
     let interest = document.querySelector('#interest');
     let year = document.querySelector('#years');
@@ -28,11 +19,44 @@ frm.addEventListener('submit', function(e){
     let totalPayment = document.getElementById('total-payment');
     let totalInterest = document.getElementById('total-interest');
     let monthlyInterest = document.getElementById('monthly-interest');
+
+    if(isFinite(monthlyPayableAmount)){
     monthlyPayment.value = monthlyPayableAmount.toFixed(2);
     totalPayment.value = (monthlyPayableAmount * calculatedPayment).toFixed(2);
     totalInterest.value = ((monthlyPayableAmount * calculatedPayment) - principle).toFixed(2);
     monthlyInterest.value = (((monthlyPayableAmount * calculatedPayment) - principle) / calculatedPayment).toFixed(2);
-
-    
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    setTimeout(function(){
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+    }, 3000);
+    } else {
+        document.getElementById('loading').style.display = 'block';
+        setTimeout( function(){
+            if(count < 4){
+                showErrot('Check Your Numbers');   
+            }
+        }, 3000);
+       
+    }
     e.preventDefault();
 })
+
+function showErrot(msg){
+    document.getElementById('loading').style.display = 'none';
+    let div = document.createElement('div');
+    div.style.background = "red";
+    let heading = document.createElement('h3');
+    heading.appendChild(document.createTextNode(msg));
+    div.appendChild(heading);
+    heading.style.color = 'white';
+    let mainHeading = document.querySelector('.heading');
+    let card = document.querySelector('.card');
+    card.insertBefore(div, mainHeading);
+    
+    setTimeout(function(){
+        div.remove();
+    }, 3000);
+    
+}
