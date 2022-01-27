@@ -1,13 +1,24 @@
+let jjj = localStorage.getItem('count');
+
+if(jjj < 4){
+
+
 let frm = document.querySelector('#loan-form');
 var count = 0;
 frm.addEventListener('submit', function(e){
-    count++
-    console.log(count);
-    if(count > 3){
+    if(count < 4){
+        count++
+        localStorage.setItem('count', count);
+    }
+    
+    let kkk = localStorage.getItem('count');
+    
+    if(kkk == 4){
         document.querySelector('.container').style.display = 'none';
         document.querySelector('#try-again').style.display = 'block';
+        
     }
-    let loanAmount = document.querySelector('#amount');
+        let loanAmount = document.querySelector('#amount');
     let interest = document.querySelector('#interest');
     let year = document.querySelector('#years');
     let principle = parseFloat(loanAmount.value);
@@ -34,13 +45,14 @@ frm.addEventListener('submit', function(e){
     } else {
         document.getElementById('loading').style.display = 'block';
         setTimeout( function(){
-            if(count < 4){
+    
                 showErrot('Check Your Numbers');   
-            }
         }, 3000);
        
     }
     e.preventDefault();
+
+    
 })
 
 function showErrot(msg){
@@ -59,4 +71,10 @@ function showErrot(msg){
         div.remove();
     }, 3000);
     
+}
+
+}else   {
+    setTimeout(function(){
+        localStorage.setItem('count', 0);
+    }, 9000);
 }
